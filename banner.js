@@ -866,7 +866,7 @@ function adjustContentPadding() {
 }
 });
 
-//saftey Control//
+//safety Control//
 document.addEventListener("contextmenu", function(e) {
   e.preventDefault();
 });
