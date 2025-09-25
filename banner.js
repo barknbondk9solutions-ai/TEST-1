@@ -497,22 +497,22 @@ if (settings.testMode) {
   })();
 
 (function() {
-  // Prevent context menu (everywhere, especially on images)
-  document.addEventListener("contextmenu", function(e) {
-    e.preventDefault();
-  });
+  // Disable right-click everywhere
+  document.addEventListener("contextmenu", e => e.preventDefault());
 
-  // Prevent touch on images
+  // Disable text selection globally
+  document.addEventListener('selectstart', e => e.preventDefault());
+
+  // Disable touch on images + observe dynamically added images
   function blockTouchOnImages() {
     document.querySelectorAll("img").forEach(img => {
       img.addEventListener("touchstart", e => e.preventDefault());
     });
   }
   blockTouchOnImages();
-  const observer = new MutationObserver(blockTouchOnImages);
-  observer.observe(document.body, { childList: true, subtree: true });
+  new MutationObserver(blockTouchOnImages).observe(document.body, { childList: true, subtree: true });
 
-  // Prevent copy, cut, paste, drag
+  // Disable copy, cut, paste, dragstart
   ['copy', 'cut', 'paste', 'dragstart'].forEach(evt =>
     document.addEventListener(evt, e => {
       e.preventDefault();
@@ -520,14 +520,17 @@ if (settings.testMode) {
     })
   );
 
-  // Block key combinations
-  document.addEventListener("keydown", function(e) {
+  // Block key combos including print (Ctrl+P)
+  document.addEventListener("keydown", e => {
     const blockedKeys = ['c','x','v','p','s','a','u'];
     if ((e.ctrlKey || e.metaKey) && blockedKeys.includes(e.key.toLowerCase())) {
       e.preventDefault();
     }
-
-    // Block F12 and DevTools shortcuts
+    // Also block print keys specifically
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+      e.preventDefault();
+    }
+    // Block F12 and dev tools shortcuts
     if (
       e.key === "F12" ||
       (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase()))
@@ -536,14 +539,13 @@ if (settings.testMode) {
     }
   });
 
-  // Prevent multi-touch gestures (pinch zoom)
+  // Prevent multitouch gestures (pinch zoom)
   document.addEventListener('touchstart', e => {
     if (e.touches.length > 1) e.preventDefault();
   }, { passive: false });
-
   document.addEventListener('gesturestart', e => e.preventDefault());
 
-  // Add blur overlay when tab/window loses focus or visibility
+  // Blur overlay on tab/window lose focus
   (function() {
     const overlay = document.createElement('div');
     Object.assign(overlay.style, {
