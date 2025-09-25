@@ -150,3 +150,4 @@ for (const id in trainers) {
 
   container.appendChild(card);
 }
+
