@@ -589,9 +589,15 @@ function blockTouchOnImages() {
 blockTouchOnImages();
 new MutationObserver(blockTouchOnImages).observe(document.body, { childList: true, subtree: true });
 
-document.querySelectorAll('a > img').forEach(img => {
-  img.parentElement.addEventListener('click', e => e.preventDefault());
-  img.parentElement.style.pointerEvents = 'none';
+document.addEventListener("contextmenu", function(e) {
+  if (e.target.tagName === "IMG") {
+      e.preventDefault();
+  }
 });
+document.querySelectorAll("img").forEach(img => {
+  img.addEventListener("touchstart", e => {
+    e.preventDefault();
+  });
+});  
 
 })();
