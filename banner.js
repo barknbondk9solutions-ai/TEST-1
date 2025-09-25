@@ -497,46 +497,85 @@ if (settings.testMode) {
   })();
 
 (function() {
-  // Disable right-click everywhere
-  document.addEventListener("contextmenu", e => e.preventDefault());
+  const body = document.body;
 
-  // Disable text selection globally
+  // Create full-page overlay that hides content on forbidden actions
+  const overlay = document.createElement('div');
+  Object.assign(overlay.style, {
+    position: 'fixed',
+    top: '0',
+    left: '0',
+    width: '100vw',
+    height: '100vh',
+    backgroundColor: '#000',
+    opacity: '0.9',
+    color: '#fff',
+    fontSize: '2rem',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 999999,
+    textAlign: 'center',
+    padding: '20px',
+    boxSizing: 'border-box',
+    userSelect: 'none',
+    cursor: 'not-allowed',
+    visibility: 'hidden',
+  });
+  overlay.innerText = "Content is hidden. Please don't try to copy or inspect this page.";
+  document.body.appendChild(overlay);
+
+  function showOverlay() {
+    overlay.style.visibility = 'visible';
+    body.classList.add('blur-page');
+    body.style.pointerEvents = 'none';
+  }
+
+  function hideOverlay() {
+    overlay.style.visibility = 'hidden';
+    body.classList.remove('blur-page');
+    body.style.pointerEvents = 'auto';
+  }
+
+  // Disable right-click globally
+  document.addEventListener('contextmenu', e => e.preventDefault());
+
+  // Disable text selection via event (extra precaution)
   document.addEventListener('selectstart', e => e.preventDefault());
 
-  // Disable touch on images + observe dynamically added images
-  function blockTouchOnImages() {
-    document.querySelectorAll("img").forEach(img => {
-      img.addEventListener("touchstart", e => e.preventDefault());
-    });
-  }
-  blockTouchOnImages();
-  new MutationObserver(blockTouchOnImages).observe(document.body, { childList: true, subtree: true });
-
-  // Disable copy, cut, paste, dragstart
+  // Disable copy, cut, paste, dragstart events
   ['copy', 'cut', 'paste', 'dragstart'].forEach(evt =>
     document.addEventListener(evt, e => {
       e.preventDefault();
-      if (evt === 'copy') alert("Copying is disabled on this site.");
+      if (evt === 'copy') alert('Copying is disabled on this site.');
     })
   );
 
-  // Block key combos including print (Ctrl+P)
-  document.addEventListener("keydown", e => {
-    const blockedKeys = ['c','x','v','p','s','a','u'];
+  // Block key combos including print and devtools shortcuts
+  document.addEventListener('keydown', e => {
+    const blockedKeys = ['c', 'x', 'v', 'p', 's', 'a', 'u'];
     if ((e.ctrlKey || e.metaKey) && blockedKeys.includes(e.key.toLowerCase())) {
       e.preventDefault();
     }
-    // Also block print keys specifically
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
       e.preventDefault();
+      alert('Printing is disabled on this site.');
     }
-    // Block F12 and dev tools shortcuts
     if (
-      e.key === "F12" ||
+      e.key === 'F12' ||
       (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase()))
     ) {
       e.preventDefault();
+      showOverlay();
     }
+  });
+
+  // Blur and overlay on tab/window blur or visibility hidden
+  window.addEventListener('blur', showOverlay);
+  window.addEventListener('focus', hideOverlay);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) showOverlay();
+    else hideOverlay();
   });
 
   // Prevent multitouch gestures (pinch zoom)
@@ -545,42 +584,12 @@ if (settings.testMode) {
   }, { passive: false });
   document.addEventListener('gesturestart', e => e.preventDefault());
 
-  // Blur overlay on tab/window lose focus
-  (function() {
-    const overlay = document.createElement('div');
-    Object.assign(overlay.style, {
-      position: 'fixed',
-      top: '0',
-      left: '0',
-      width: '100vw',
-      height: `${window.innerHeight}px`,
-      backdropFilter: 'blur(12px)',
-      WebkitBackdropFilter: 'blur(12px)',
-      zIndex: 9999,
-      pointerEvents: 'none',
-      opacity: '0',
-      transition: 'opacity 0.05s ease'
+  // Disable touchstart on all images, including dynamically added
+  function blockTouchOnImages() {
+    document.querySelectorAll('img').forEach(img => {
+      img.addEventListener('touchstart', e => e.preventDefault());
     });
-    document.body.appendChild(overlay);
-
-    function activateBlur() { overlay.style.opacity = '1'; }
-    function deactivateBlur() { overlay.style.opacity = '0'; }
-
-    function updateOverlaySize() {
-      overlay.style.height = `${window.innerHeight}px`;
-      overlay.style.width = `${window.innerWidth}px`;
-    }
-
-    window.addEventListener('resize', updateOverlaySize);
-    window.addEventListener('orientationchange', updateOverlaySize);
-
-    window.addEventListener('blur', () => {
-      if (document.activeElement.tagName !== 'IFRAME') activateBlur();
-    });
-    window.addEventListener('focus', deactivateBlur);
-
-    document.addEventListener('visibilitychange', () => {
-      document.hidden ? activateBlur() : deactivateBlur();
-    });
-  })();
+  }
+  blockTouchOnImages();
+  new MutationObserver(blockTouchOnImages).observe(document.body, { childList: true, subtree: true });
 })();
