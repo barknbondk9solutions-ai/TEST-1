@@ -1,197 +1,155 @@
-/* Prevent text selection & image dragging */
+:root {
+  --default-color: #2193b0;
+  --default-text: #ffffff;
+  --transition-speed: 0.25s;
+}
+
+/* =======================
+   BASE
+======================= */
 body {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  transition: padding-top 0.3s ease;
 }
 
-img {
-  -webkit-user-drag: none;
-  user-drag: none;
-  pointer-events: none;
+/* =======================
+   HEADER & FOOTER
+======================= */
+header,
+footer,
+.header-nav {
+  padding: 1rem;
+  text-align: center;
+  background-color: var(--default-color);
+  color: var(--default-text);
+  transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
 }
 
-.no-select {
-  user-select: none;
+/* Make links inherit the header/footer text color */
+header a,
+footer a,
+.header-nav a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-speed) ease;
 }
 
-@media print {
-  body {
-    display: none !important;
-  }
-}
-/* banner.css */
+/* =======================
+   BANNER CONTAINER
+======================= */
 #banner-container {
-  will-change: transform;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  text-align: center;
+  font-weight: bold;
+  position: relative;
   z-index: 1000;
-  display: flex;
-  flex-direction: column;
   transition: transform 0.3s ease;
-}
-#banner-container.hide-banner {
-  transform: translateY(-100%);
 }
 
 .announcement-banner {
   display: none;
-  padding: 12px;
-  text-align: center;
-  font-family: system-ui, sans-serif;
-  font-size: 1rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  cursor: pointer;
-  overflow: hidden;
-  white-space: nowrap;
-  transition: background 0.5s ease, color 0.5s ease, transform 0.3s ease;
-}
-
-.announcement-banner p {
-  display: inline-block;
-  margin: 0;
-  padding-right: 50px;
-  line-height: 1.4;
+  padding: 0.75rem 1rem;
+  color: var(--default-text);
+  background-color: var(--default-color);
+  transition:
+    background var(--transition-speed) ease,
+    color var(--transition-speed) ease,
+    transform 0.3s ease,
+    opacity 0.3s ease;
   white-space: pre-line;
 }
 
-@media (max-width: 480px) {
-  .announcement-banner {
-    font-size: 0.95rem;
-    padding: 12px 10px;
-    white-space: normal;
-    overflow-x: auto;
-  }
-  .announcement-banner p {
-    display: block;
-    padding-right: 0;
-  }
+.announcement-banner.active,
+.announcement-banner[style*="display: block"] {
+  display: block;
 }
-#page-wrapper {
-  flex: 1;
+
+.announcement-banner p {
+  color: inherit;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* =======================
+   NAVIGATION BAR
+======================= */
+.nav-bar,
+.header-nav {
   display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-#page-content {
-  flex: 1;
-  padding-top: 0;
-  transition: padding-top 0.3s ease;
-  padding-bottom: 40px;
-}
- /* Main nav container */
-  .header-nav {
-    padding: 10px 20px;
-    font-family: Arial, sans-serif;
-    background: transparent;
-    z-index: 10;
-    position: static;
-  }
-
-  /* Top row with title + hamburger */
-  .nav-header {
-    display: none; /* hidden on desktop */
-    background: transparent;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .nav-title {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: white;
-  }
-
-  /* Hamburger button */
-  .nav-toggle {
-    background: none;
-    margin: 0 auto;
-    border: none;
-    font-size: 1.8em;
-    color: white;
-    cursor: pointer;
-    display: none; /* hidden on desktop */
-  }
-
-  /* Navigation list - full nav on desktop */
-  .nav-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 40px;
-  }
-
-  .nav-list li a {
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s;
-  }
-
-  .nav-list li a:hover {
-    color: #000;
-  }
-
-  /* === Mobile styles (â‰¤500px) === */
-  @media (max-width: 500px) {
-    .nav-header {
-      display: flex;
-    }
-
-    .nav-toggle {
-      display: block;
-    }
-
-    .nav-list {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .nav-list.active {
-      display: flex;
-    }
-  }
-#site-footer {
+  justify-content: center;
+  align-items: center;
   position: relative;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: transparent;
-  z-index: 9998;
-  transform: translateY(0); /* Always visible */
-  transition: background 0.3s ease, color 0.3s ease;
 }
 
-
-#site-footer .footer-content {
+.nav-links,
+.nav-list {
+  list-style: none;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;          /* Wrap links on small screens */
-  justify-content: center;  /* Horizontally center content */
-  align-items: center;      /* Vertically center content */
-  text-align: center;
-  gap: 10px;                /* Space between items */
-  padding: 10px 20px;
+  gap: 1rem;
+  padding: 0;
+  margin: 0;
 }
 
-/* default state (footer visible) */
-#site-footer {
-  transform: translateY(0);
-  transition: transform 0.3s ease-in-out;
+.nav-links li a,
+.nav-list li a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-speed) ease;
 }
 
-  /* === Mobile styles (â‰¤500px) === */
-  @media (max-width: 500px) {
-    #site-footer {
-      display: flex;
+/* =======================
+   HAMBURGER MENU (RESPONSIVE)
+======================= */
+.hamburger,
+.nav-toggle {
+  display: none;
+  font-size: 2rem;
+  cursor: pointer;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  user-select: none;
+  color: inherit;          
+  background: transparent; 
+  border: none;         
+  z-index: 1200; 
 }
+
+@media (max-width: 768px) {
+  .nav-links li,
+.nav-list li {
+  padding-top: 0.5rem; 
+}
+
+.nav-links li a,
+.nav-list li a {
+  display: inline-block; 
+  margin-top: 0.3rem;
+}
+
+  .hamburger,
+  .nav-toggle {
+    display: block;
+  }
+
+  .nav-links,
+  .nav-list {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.85);
+    width: 200px;
+    margin-top: 1rem;
+    text-align: center;
+    border-radius: 4px;
+  }
+
+  .nav-links.active,
+  .nav-list.active {
+    display: flex;
+    z-index: 1100;
+    padding-bottom: 30px;
+  }
