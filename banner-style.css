@@ -173,7 +173,7 @@ body {
 img {
   -webkit-user-drag: none;
   user-drag: none;
-  pointer-events: none;
+  pointer-events: none !important;
 }
 
 /* Blur effect class for the body */
