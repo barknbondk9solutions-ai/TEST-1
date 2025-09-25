@@ -31,7 +31,7 @@ html, body {
 h1 {
   text-align: center;
   font-size: 2rem;
-  margin: 0px 0 0px;
+  margin: 20px 0 0px;
 }
 
 /* =======================
@@ -207,5 +207,3 @@ h1 {
     padding: 16px;
   }
 }
-
-
