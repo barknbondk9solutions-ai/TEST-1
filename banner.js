@@ -575,29 +575,45 @@ if (settings.testMode) {
   });
 
   // Prevent multitouch gestures (pinch zoom)
-  document.addEventListener('touchstart', e => {
-    if (e.touches.length > 1) e.preventDefault();
-  }, { passive: false });
-  document.addEventListener('gesturestart', e => e.preventDefault());
+document.addEventListener('touchstart', e => {
+  if (e.touches.length > 1) e.preventDefault();
+}, { passive: false });
+
+document.addEventListener('gesturestart', e => e.preventDefault());
 
 // Disable touchstart on all images, including dynamically added
 function blockTouchOnImages() {
   document.querySelectorAll('img').forEach(img => {
-    img.addEventListener('touchstart', e => e.preventDefault());
+    if (!img.hasAttribute('data-touch-blocked')) {
+      img.addEventListener('touchstart', e => e.preventDefault());
+      img.setAttribute('data-touch-blocked', 'true');
+    }
   });
 }
 blockTouchOnImages();
 new MutationObserver(blockTouchOnImages).observe(document.body, { childList: true, subtree: true });
 
-document.addEventListener("contextmenu", function(e) {
-  if (e.target.tagName === "IMG") {
+// **ALLOW right-click context menu on images, so no blocking here**
+
+// Block left-click on images
+document.querySelectorAll('img').forEach(img => {
+  if (!img.hasAttribute('data-click-blocked')) {
+    img.addEventListener('click', e => {
       e.preventDefault();
+      e.stopPropagation();
+    });
+    img.setAttribute('data-click-blocked', 'true');
   }
 });
-document.querySelectorAll("img").forEach(img => {
-  img.addEventListener("touchstart", e => {
-    e.preventDefault();
-  });
-});  
 
-})();
+// Block left-click on links wrapping images
+document.querySelectorAll('a > img').forEach(img => {
+  const link = img.parentElement;
+  if (!link.hasAttribute('data-click-blocked')) {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+    });
+    link.setAttribute('data-click-blocked', 'true');
+  }
+});
