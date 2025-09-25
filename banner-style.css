@@ -21,7 +21,7 @@ footer,
 .header-nav {
   padding: 1rem;
   text-align: center;
-  background-color: var(--default-color);
+  
   color: var(--default-text);
   transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
 }
@@ -153,4 +153,3 @@ footer a,
     z-index: 1100;
     padding-bottom: 30px;
   }
-
