@@ -557,10 +557,6 @@ if (settings.testMode) {
     if ((e.ctrlKey || e.metaKey) && blockedKeys.includes(e.key.toLowerCase())) {
       e.preventDefault();
     }
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
-      e.preventDefault();
-      alert('Printing is disabled on this site.');
-    }
     if (
       e.key === 'F12' ||
       (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key.toUpperCase()))
