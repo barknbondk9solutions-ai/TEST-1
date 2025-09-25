@@ -1,58 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="banner-style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Expert Team | BarkNBondK9Solutions</title>
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="banner-style.css" />
 </head>
 <body>
-<div id="page-content"></div>
+
+<!-- =======================
+     HEADER
+======================= -->
+<header id="site-header">
+  <nav class="nav-bar">
+    <button class="hamburger" id="hamburger">&#9776;</button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="https://barknbondk9solutions.com/">Home</a></li>
+      <li><a href="https://barknbondk9solutions.com/learn-more-about-our-trust-based-approach-to-training">About</a></li>
+      <li><a href="https://barknbondk9solutions.com/mobile-1-on-1-dog-training-services">Services</a></li>
+      <li><a href="https://resources.barknbondk9solutions.com/">Resources</a></li>
+      <li><a href="https://progress-portal.barknbondk9solutions.com/">PupTrack</a></li>
+      <li><a href="https://team.barknbondk9solutions.com/">Team</a></li>
+      <li><a href="https://contact.barknbondk9solutions.com/">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- =======================
+     BANNER
+======================= -->
 <div id="banner-container"></div>
 
-    <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6YDTVFLPLH"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-6YDTVFLPLH');
-  </script>
+<!-- =======================
+     PAGE CONTENT
+======================= -->
+<main id="page-content">
+  <h1 style="text-align: center;">Our Expert Team of Dog Trainers</h1>
+  <h4 style="text-align: center;">Dedicated to helping every dog and owner succeed.</h4>
 
-  <!-- Crisp Chat -->
-  <script type="text/javascript">
-    window.$crisp = [];
-    window.CRISP_WEBSITE_ID = "3414fd4a-ab39-440d-a142-8cf19be43ed1";
-    (function () {
-      const d = document;
-      const s = d.createElement("script");
-      s.src = "https://client.crisp.chat/l.js";
-      s.async = 1;
-      d.getElementsByTagName("head")[0].appendChild(s);
-    })();
-  </script>  
-<h1 style= "text-align: center;">Our Expert Team of Dog Trainers</h1>
-<h4 style= "text-align: center;">Dedicated to helping every dog and owner succeed.</h4>
+  <div class="trainers" id="trainerContainer"></div>
 
-<div class="trainers" id="trainerContainer"></div>
-      
-<!-- Modal -->
-<div class="modal" id="modal" aria-hidden="true">
-  <div class="modal-content">
-    <button class="close" id="modalClose">&times;</button>
-    <h2 id="modalName"></h2>
-    <div><strong>Title:</strong> <span id="modalTitle"></span></div>
-    <div><strong>Credentials:</strong> <span id="modalCredentials"></span></div>
-    <div class="badges" id="modalBadges"></div>
-    <div><strong>Experience:</strong> <span id="modalExperience"></span></div>
-    <div><strong>Specialties:</strong> <span id="modalSpecialties"></span></div>
-    <p id="modalBio"></p>
-    <div class="gallery" id="modalGallery"></div>
-    <div class="no-photos" id="modalNoPhotos">No photos available</div>
+  <!-- Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="close" id="modalClose">&times;</button>
+      <h2 id="modalName"></h2>
+      <div><strong>Title:</strong> <span id="modalTitle"></span></div>
+      <div><strong>Credentials:</strong> <span id="modalCredentials"></span></div>
+      <div class="badges" id="modalBadges"></div>
+      <div><strong>Experience:</strong> <span id="modalExperience"></span></div>
+      <div><strong>Specialties:</strong> <span id="modalSpecialties"></span></div>
+      <p id="modalBio"></p>
+      <div class="gallery" id="modalGallery"></div>
+      <div class="no-photos" id="modalNoPhotos">No photos available</div>
+    </div>
   </div>
-</div>
+</main>
 
+<!-- =======================
+     FOOTER
+======================= -->
+<footer id="site-footer">
+  <div class="footer-legal" style="text-align:center; padding:20px; background:transparent; color:white; font-size:16px;">
+    <p>
+      &copy; <span id="current-year"></span> All rights reserved. BarkNBondK9Solutions, LLC<br>
+      Licensed & Insured<br>
+      <a href="https://barknbondk9solutions.com/terms-and-conditions" target="_blank">Terms & Conditions</a> |
+      <a href="https://barknbondk9solutions.com/privacy-policy" target="_blank">Privacy Policy</a> |
+      <a href="https://barknbondk9solutions.com/liability-waiver" target="_blank">Liability Waiver</a> |
+      <a href="https://barknbondk9solutions.com/dog-training-faq" target="_blank">FAQ</a> |
+      <a href="https://barknbondk9solutions.com/accessibility" target="_blank">Accessibility</a>
+    </p>
+  </div>
+</footer>
+
+<!-- =======================
+     SCRIPTS
+======================= -->
 <script src="script.js"></script>
 <script src="banner.js"></script>
+
+<script>
+  // Set current year dynamically
+  document.getElementById('current-year').textContent = new Date().getFullYear();
+</script>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6YDTVFLPLH"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-6YDTVFLPLH');
+</script>
+
+<!-- Crisp Chat -->
+<script type="text/javascript">
+  window.$crisp = [];
+  window.CRISP_WEBSITE_ID = "3414fd4a-ab39-440d-a142-8cf19be43ed1";
+  (function () {
+    const d = document;
+    const s = d.createElement("script");
+    s.src = "https://client.crisp.chat/l.js";
+    s.async = 1;
+    d.getElementsByTagName("head")[0].appendChild(s);
+  })();
+</script>
+
 </body>
 </html>
