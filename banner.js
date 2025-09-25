@@ -3,7 +3,7 @@
 // SETTINGS
 // =======================
 const settings = {
-  testMode: true,
+  testMode: false,
   emergencyActive: false,
 
   messages: {
@@ -195,6 +195,19 @@ function getGradientForDate(gradients) {
 function getRandomFromArray(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
+  
+function getSeason() {
+  const month = new Date().getMonth(); // 0 = Jan, 11 = Dec
+  if (month >= 2 && month <= 4) {
+    return "spring";
+  } else if (month >= 5 && month <= 7) {
+    return "summer";
+  } else if (month >= 8 && month <= 10) {
+    return "fall";
+  } else {
+    return "winter";
+  }
+}
 
 // =======================
 // SUNRISE/SUNSET
@@ -364,10 +377,40 @@ if (activeAlerts.size > 0) {
 
   // 6️⃣ Clear / Night default messages
   const isDay = isDaytimeEST();
-  const messagesPool = isDay ? settings.clearWeatherMessages : settings.nightWeatherMessages;
-  const bg = isDay ? "linear-gradient(90deg, #4caf50, #81c784)" : "linear-gradient(90deg, #283593, #3949ab)";
-  const textColor = "#fff";
-  setBannerContent(getRandomFromArray(messagesPool), bg, textColor);
+const season = getSeason();
+
+const messagesPool = isDay
+  ? settings.clearWeatherMessages
+  : settings.nightWeatherMessages;
+
+let bg;
+
+// 🌦️ Choose gradient based on season and time of day
+switch (season) {
+  case "spring":
+    bg = isDay
+      ? "linear-gradient(90deg, #81c784, #aed581)"   // Light greens
+      : "linear-gradient(90deg, #33691e, #558b2f)";   // Darker greens
+    break;
+  case "summer":
+    bg = isDay
+      ? "linear-gradient(90deg, #4fc3f7, #81d4fa)"    // Bright blues
+      : "linear-gradient(90deg, #01579b, #0288d1)";   // Deep blues
+    break;
+  case "fall":
+    bg = isDay
+      ? "linear-gradient(90deg, #ffb74d, #ff8a65)"    // Orange tones
+      : "linear-gradient(90deg, #e65100, #bf360c)";   // Deep autumn colors
+    break;
+  case "winter":
+    bg = isDay
+      ? "linear-gradient(90deg, #90caf9, #e3f2fd)"    // Frosty blues
+      : "linear-gradient(90deg, #1a237e, #0d47a1)";   // Cold night blues
+    break;
+}
+
+const textColor = "#fff";
+setBannerContent(getRandomFromArray(messagesPool), bg, textColor);
 }
 
 // Initial call and setup interval
@@ -452,3 +495,59 @@ if (settings.testMode) {
   container.addEventListener("click", cycleTestBanners);
 }
   })();
+
+(function() {
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  ['copy', 'cut', 'paste'].forEach(evt => 
+    document.addEventListener(evt, e => e.preventDefault())
+  );
+  document.addEventListener('dragstart', e => e.preventDefault());
+  document.addEventListener('keydown', function(e) {
+    const blockedKeys = ['c','x','v','p','s','a']; 
+    if ((e.ctrlKey || e.metaKey) && blockedKeys.includes(e.key.toLowerCase())) {
+      e.preventDefault();
+    }
+    if ((e.key === "F12") || 
+        (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase()))) {
+      e.preventDefault();
+    }
+  });
+  document.addEventListener('touchstart', e => {
+    if (e.touches.length > 1) e.preventDefault(); // prevent pinch zoom
+  }, { passive: false });
+  document.addEventListener('gesturestart', e => e.preventDefault()); // iOS
+  (function() {
+  const overlay = document.createElement('div');
+  Object.assign(overlay.style, {
+    position: 'fixed',
+    top: '0',
+    left: '0',
+    width: '100vw',  
+    height: `${window.innerHeight}px`,
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
+    zIndex: 9999,
+    pointerEvents: 'none',
+    opacity: '0',
+    transition: 'opacity 0.05s ease' 
+  });
+  document.body.appendChild(overlay);
+  function activateBlur() { overlay.style.opacity = '1'; }
+  function deactivateBlur() { overlay.style.opacity = '0'; }
+  function updateOverlaySize() {
+    overlay.style.height = `${window.innerHeight}px`;
+    overlay.style.width = `${window.innerWidth}px`;
+  }
+  window.addEventListener('resize', updateOverlaySize);
+  window.addEventListener('orientationchange', updateOverlaySize);
+
+  window.addEventListener('blur', () => {
+    if (document.activeElement.tagName !== 'IFRAME') activateBlur();
+  });
+  window.addEventListener('focus', deactivateBlur);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) activateBlur();
+    else deactivateBlur();
+  });
+})();
+})();
