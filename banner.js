@@ -580,12 +580,19 @@ if (settings.testMode) {
   }, { passive: false });
   document.addEventListener('gesturestart', e => e.preventDefault());
 
-  // Disable touchstart on all images, including dynamically added
-  function blockTouchOnImages() {
-    document.querySelectorAll('img').forEach(img => {
-      img.addEventListener('touchstart', e => e.preventDefault());
-    });
-  }
-  blockTouchOnImages();
-  new MutationObserver(blockTouchOnImages).observe(document.body, { childList: true, subtree: true });
+// Disable touchstart on all images, including dynamically added
+function blockTouchOnImages() {
+  document.querySelectorAll('img').forEach(img => {
+    img.addEventListener('touchstart', e => e.preventDefault());
+  });
+}
+blockTouchOnImages();
+new MutationObserver(blockTouchOnImages).observe(document.body, { childList: true, subtree: true });
+
+// Remove links wrapping images (for all current images)
+document.querySelectorAll('a > img').forEach(img => {
+  const link = img.parentElement;
+  link.replaceWith(img);
+});
+
 })();
