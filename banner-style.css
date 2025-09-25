@@ -154,13 +154,13 @@ footer a,
     padding-bottom: 30px;
   }
 
-body, * {
+body, {
   -webkit-user-select: none;
   -moz-user-select: none;   
   -ms-user-select: none;    
   user-select: none;        
 }
-img, a {
+img {
   -webkit-user-drag: none;
   user-drag: none;
   pointer-events: none;
