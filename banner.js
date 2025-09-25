@@ -508,7 +508,7 @@ if (settings.testMode) {
     width: '100vw',
     height: '100vh',
     backgroundColor: '#000',
-    opacity: '0.9',
+    opacity: '1',
     color: '#fff',
     fontSize: '2rem',
     display: 'flex',
@@ -522,7 +522,7 @@ if (settings.testMode) {
     cursor: 'not-allowed',
     visibility: 'hidden',
   });
-  overlay.innerText = "Content is hidden. Please don't try to copy or inspect this page.";
+  overlay.innerText = "Property of BarkNBondK9Solutions,LLC";
   document.body.appendChild(overlay);
 
   function showOverlay() {
