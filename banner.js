@@ -589,10 +589,9 @@ function blockTouchOnImages() {
 blockTouchOnImages();
 new MutationObserver(blockTouchOnImages).observe(document.body, { childList: true, subtree: true });
 
-// Remove links wrapping images (for all current images)
 document.querySelectorAll('a > img').forEach(img => {
-  const link = img.parentElement;
-  link.replaceWith(img);
+  img.parentElement.addEventListener('click', e => e.preventDefault());
+  img.parentElement.style.pointerEvents = 'none';
 });
 
 })();
