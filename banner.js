@@ -546,37 +546,58 @@ if (settings.testMode) {
   document.head.appendChild(styleEl);
 
   /***** Blur Overlay *****/
-  const overlay = document.createElement('div');
-  Object.assign(overlay.style, {
-    position: 'fixed',
-    inset: '0 0 0 0',
-    width: '100vw',
-    height: '100vh',
-    backdropFilter: 'blur(12px)',
-    WebkitBackdropFilter: 'blur(12px)',
-    background: 'rgba(255,255,255,0.03)',
-    zIndex: '2147483646',
-    pointerEvents: 'none',
-    opacity: '0',
-    transition: 'opacity 120ms linear'
-  });
-  document.body.appendChild(overlay);
+onst blurOverlay = document.createElement('div');
+Object.assign(blurOverlay.style, {
+  position: 'fixed',
+  inset: '0 0 0 0',
+  width: '100vw',
+  height: '100vh',
+  backdropFilter: 'blur(12px)',
+  WebkitBackdropFilter: 'blur(12px)',
+  background: 'rgba(255,255,255,0.03)',
+  zIndex: '2147483646',  // extremely high so overlay sits on top
+  pointerEvents: 'none',  // allows clicks to pass through
+  opacity: '0',            // initially hidden
+  transition: 'opacity 120ms linear'
+});
+document.body.appendChild(blurOverlay);
 
-  const showBlur = () => (overlay.style.opacity = '1');
-  const hideBlur = () => (overlay.style.opacity = '0');
-  const updateOverlaySize = () => {
-    overlay.style.width = `${window.innerWidth}px`;
-    overlay.style.height = `${window.innerHeight}px`;
-  };
-  window.addEventListener('resize', updateOverlaySize, { passive: true });
-  window.addEventListener('orientationchange', updateOverlaySize, { passive: true });
-  window.addEventListener('blur', () => {
-    if (document.activeElement?.tagName !== 'IFRAME') showBlur();
-  });
-  window.addEventListener('focus', hideBlur);
-  document.addEventListener('visibilitychange', () =>
-    document.hidden ? showBlur() : hideBlur()
-  );
+// Add logo to overlay
+const logo = document.createElement('img');
+logo.src = 'https://assets.zyrosite.com/YrDqlxeZ4JTQb14e/watermark-bnbk9-mv0P7QQR34SLGGMv.png'; // replace with your logo URL
+logo.style.position = 'absolute';
+logo.style.top = '50%';
+logo.style.left = '50%';
+logo.style.transform = 'translate(-50%, -50%)';
+logo.style.maxWidth = '300px';
+logo.style.maxHeight = '300px';
+logo.style.pointerEvents = 'none';
+// Optional: remove this if your PNG already has 20% opacity
+// logo.style.opacity = '1'; 
+
+blurOverlay.appendChild(logo);
+
+// Functions to show/hide blur
+const showBlur = () => (blurOverlay.style.opacity = '1');
+const hideBlur = () => (blurOverlay.style.opacity = '0');
+
+// Keep overlay sized to viewport
+const updateOverlaySize = () => {
+  blurOverlay.style.width = `${window.innerWidth}px`;
+  blurOverlay.style.height = `${window.innerHeight}px`;
+};
+window.addEventListener('resize', updateOverlaySize, { passive: true });
+window.addEventListener('orientationchange', updateOverlaySize, { passive: true });
+updateOverlaySize();
+
+// Show blur when user leaves tab or window
+window.addEventListener('blur', () => {
+  if (document.activeElement?.tagName !== 'IFRAME') showBlur();
+});
+window.addEventListener('focus', hideBlur);
+document.addEventListener('visibilitychange', () =>
+  document.hidden ? showBlur() : hideBlur()
+);
 
   /***** Event Protections *****/
   document.addEventListener('contextmenu', e => e.preventDefault(), false);
