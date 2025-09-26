@@ -573,7 +573,7 @@ logo.style.maxWidth = '300px';
 logo.style.maxHeight = '300px';
 logo.style.pointerEvents = 'none';
 
-blurOverlay.appendChild(logo);
+Overlay.appendChild(logo);
   
   const showBlur = () => (overlay.style.opacity = '1');
   const hideBlur = () => (overlay.style.opacity = '0');
