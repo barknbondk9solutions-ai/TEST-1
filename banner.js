@@ -546,7 +546,7 @@ if (settings.testMode) {
   document.head.appendChild(styleEl);
 
   /***** Blur Overlay *****/
-onst blurOverlay = document.createElement('div');
+const blurOverlay = document.createElement('div');
 Object.assign(blurOverlay.style, {
   position: 'fixed',
   inset: '0 0 0 0',
