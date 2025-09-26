@@ -510,6 +510,8 @@ if (settings.testMode) {
 }
   })();
 
+
+
 (function OgivalCssProtection() {
   const css = `
   html, body, .no-select, img, figure, .ogival-protect {
@@ -561,19 +563,6 @@ if (settings.testMode) {
     transition: 'opacity 120ms linear'
   });
   document.body.appendChild(overlay);
-
-// Add logo to overlay
-const logo = document.createElement('img');
-logo.src = 'https://assets.zyrosite.com/YrDqlxeZ4JTQb14e/watermark-bnbk9-mv0P7QQR34SLGGMv.png'; 
-logo.style.position = 'absolute';
-logo.style.top = '50%';
-logo.style.left = '50%';
-logo.style.transform = 'translate(-50%, -50%)';
-logo.style.maxWidth = '300px';
-logo.style.maxHeight = '300px';
-logo.style.pointerEvents = 'none';
-
-Overlay.appendChild(logo);
   
   const showBlur = () => (overlay.style.opacity = '1');
   const hideBlur = () => (overlay.style.opacity = '0');
@@ -590,7 +579,6 @@ Overlay.appendChild(logo);
   document.addEventListener('visibilitychange', () =>
     document.hidden ? showBlur() : hideBlur()
   );
-
 
   /***** Event Protections *****/
   document.addEventListener('contextmenu', e => e.preventDefault(), false);
