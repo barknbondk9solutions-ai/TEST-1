@@ -515,6 +515,7 @@ if (settings.testMode) {
   img, picture, svg {
     -webkit-user-drag: none !important;
     user-drag: none !important;
+    pointer-events: none !important; /* strict lock: no clicks */
   }
   @media print {
     html, body {
@@ -566,9 +567,6 @@ if (settings.testMode) {
   /***** Event Protections *****/
   document.addEventListener('contextmenu', e => e.preventDefault(), false);
   document.addEventListener('dragstart', e => e.preventDefault(), false);
-  document.addEventListener('pointerdown', e => {
-    if (['IMG','PICTURE','SVG'].includes(e.target.tagName)) e.preventDefault();
-  }, { passive: false });
   document.addEventListener('copy', e => {
     if (!e.target.isContentEditable && !['INPUT','TEXTAREA'].includes(e.target.tagName)) {
       e.preventDefault();
@@ -578,18 +576,15 @@ if (settings.testMode) {
   document.addEventListener('cut', e => e.preventDefault());
   document.addEventListener('paste', e => e.preventDefault());
 
-  // Extra hardening for images
+  /***** Strict Image Lock *****/
   function protectImages() {
-    document.querySelectorAll("img, picture, svg").forEach(img => {
-      img.setAttribute("draggable", "false");
-      img.setAttribute("oncontextmenu", "return false");
-      img.setAttribute("onmousedown", "return false");
-      img.setAttribute("onselectstart", "return false");
-      img.style.pointerEvents = "none"; // disable clicks
+    document.querySelectorAll("img, picture, svg").forEach(el => {
+      el.setAttribute("draggable", "false");
+      el.setAttribute("oncontextmenu", "return false");
+      el.setAttribute("onmousedown", "return false");
+      el.setAttribute("onselectstart", "return false");
     });
   }
-
-  // Run now + whenever new images appear (dynamic content)
   protectImages();
   const imgObserver = new MutationObserver(protectImages);
   imgObserver.observe(document.body, { childList: true, subtree: true });
