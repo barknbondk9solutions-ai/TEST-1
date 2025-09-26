@@ -578,6 +578,22 @@ if (settings.testMode) {
   document.addEventListener('cut', e => e.preventDefault());
   document.addEventListener('paste', e => e.preventDefault());
 
+  // Extra hardening for images
+  function protectImages() {
+    document.querySelectorAll("img, picture, svg").forEach(img => {
+      img.setAttribute("draggable", "false");
+      img.setAttribute("oncontextmenu", "return false");
+      img.setAttribute("onmousedown", "return false");
+      img.setAttribute("onselectstart", "return false");
+      img.style.pointerEvents = "none"; // disable clicks
+    });
+  }
+
+  // Run now + whenever new images appear (dynamic content)
+  protectImages();
+  const imgObserver = new MutationObserver(protectImages);
+  imgObserver.observe(document.body, { childList: true, subtree: true });
+
   /***** Key Protection (Win + Mac) *****/
   document.addEventListener('keydown', e => {
     const key = e.key.toLowerCase();
