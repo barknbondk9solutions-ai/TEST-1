@@ -444,6 +444,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   document.body.appendChild(blurOverlay);
 
+  const logo = document.createElement('img');
+logo.src = 'https://assets.zyrosite.com/YrDqlxeZ4JTQb14e/watermark-bnbk9-mv0P7QQR34SLGGMv.png'; // replace with your logo URL
+logo.style.opacity = '0.2';             // semi-transparent
+logo.style.maxWidth = '300px';
+logo.style.maxHeight = '300px';
+logo.style.pointerEvents = 'none';      // ensures it doesn’t block clicks
+logo.style.position = 'absolute';
+logo.style.top = '50%';
+logo.style.left = '50%';
+logo.style.transform = 'translate(-50%, -50%)';
+
+blurOverlay.appendChild(logo);
+
   function toggleOverlay(show) {
     blurOverlay.style.opacity = show ? "1" : "0";
   }
