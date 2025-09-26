@@ -437,6 +437,7 @@ document.addEventListener("DOMContentLoaded", () => {
     height: "100vh",
     backdropFilter: "blur(12px)",
     WebkitBackdropFilter: "blur(12px)",
+    background: "rgba (255,255,0.03)",
     zIndex: "998", // just below nav and banner
     pointerEvents: "none", // click passes through
     opacity: "0",
