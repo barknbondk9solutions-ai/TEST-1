@@ -102,10 +102,15 @@ footer a,
 ======================= */
 .hamburger,
 .nav-toggle {
+  background: transparent !important;
+}
+
+.hamburger,
+.nav-toggle {
   display: none;
   font-size: 2rem;
   cursor: pointer;
-  position: absolute;
+  position: center;
   left: 50%;
   transform: translateX(-50%);
   user-select: none;
@@ -130,6 +135,7 @@ footer a,
   .hamburger,
   .nav-toggle {
     display: block;
+    transform: none !important;
   }
 
   .nav-links,
