@@ -495,3 +495,166 @@ if (settings.testMode) {
   container.addEventListener("click", cycleTestBanners);
 }
   })();
+
+(function OgivalCssProtection() {
+  const css = `
+  html, body, .no-select, img, figure, .ogival-protect {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+  }
+  input, textarea, [contenteditable="true"] {
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+    -webkit-touch-callout: text !important;
+  }
+  img, picture, svg {
+    -webkit-user-drag: none !important;
+    user-drag: none !important;
+  }
+  @media print {
+    html, body {
+      display: none !important;
+      visibility: hidden !important;
+      height: 0 !important;
+      overflow: hidden !important;
+    }
+  }
+  body { touch-action: manipulation; }
+  `;
+  const styleEl = document.createElement('style');
+  styleEl.appendChild(document.createTextNode(css));
+  document.head.appendChild(styleEl);
+
+  /***** Blur Overlay *****/
+  const overlay = document.createElement('div');
+  Object.assign(overlay.style, {
+    position: 'fixed',
+    inset: '0 0 0 0',
+    width: '100vw',
+    height: '100vh',
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
+    background: 'rgba(255,255,255,0.03)',
+    zIndex: '2147483646',
+    pointerEvents: 'none',
+    opacity: '0',
+    transition: 'opacity 120ms linear'
+  });
+  document.body.appendChild(overlay);
+
+  const showBlur = () => (overlay.style.opacity = '1');
+  const hideBlur = () => (overlay.style.opacity = '0');
+  const updateOverlaySize = () => {
+    overlay.style.width = `${window.innerWidth}px`;
+    overlay.style.height = `${window.innerHeight}px`;
+  };
+  window.addEventListener('resize', updateOverlaySize, { passive: true });
+  window.addEventListener('orientationchange', updateOverlaySize, { passive: true });
+  window.addEventListener('blur', () => {
+    if (document.activeElement?.tagName !== 'IFRAME') showBlur();
+  });
+  window.addEventListener('focus', hideBlur);
+  document.addEventListener('visibilitychange', () =>
+    document.hidden ? showBlur() : hideBlur()
+  );
+
+  /***** Event Protections *****/
+  document.addEventListener('contextmenu', e => e.preventDefault(), false);
+  document.addEventListener('dragstart', e => e.preventDefault(), false);
+  document.addEventListener('pointerdown', e => {
+    if (['IMG','PICTURE','SVG'].includes(e.target.tagName)) e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('copy', e => {
+    if (!e.target.isContentEditable && !['INPUT','TEXTAREA'].includes(e.target.tagName)) {
+      e.preventDefault();
+      alert('Copying is disabled on this site.');
+    }
+  });
+  document.addEventListener('cut', e => e.preventDefault());
+  document.addEventListener('paste', e => e.preventDefault());
+
+  /***** Key Protection (Win + Mac) *****/
+  document.addEventListener('keydown', e => {
+    const key = e.key.toLowerCase();
+    const ctrl = e.ctrlKey;
+    const cmd = e.metaKey;
+    const alt = e.altKey;
+    const shift = e.shiftKey;
+
+    // DevTools
+    if ((cmd && alt && ['i','j','c','u'].includes(key)) ||
+        (cmd && shift && ['i','c','j','k'].includes(key)) ||
+        (ctrl && shift && ['i','c','j','k'].includes(key)) ||
+        (ctrl && key === 'u')) {
+      e.preventDefault(); e.stopPropagation();
+    }
+
+    // Save, print, refresh, new tab, new window
+    if ((ctrl || cmd) && ['s','p','r','n','t'].includes(key)) {
+      e.preventDefault(); e.stopPropagation();
+    }
+
+    // Copy, paste, cut, select all
+    if ((ctrl || cmd) && ['a','c','x','v'].includes(key)) {
+      e.preventDefault(); e.stopPropagation();
+    }
+
+    // Zoom
+    if ((ctrl || cmd) && ['+','-','0','=', '_'].includes(key)) {
+      e.preventDefault(); e.stopPropagation();
+    }
+
+    // F1–F12
+    if (e.keyCode >= 112 && e.keyCode <= 123) {
+      e.preventDefault(); e.stopPropagation();
+    }
+  }, false);
+
+  /***** Mobile Zoom Blocking *****/
+  document.addEventListener('gesturestart', e => e.preventDefault(), { passive: false });
+  document.addEventListener('gesturechange', e => e.preventDefault(), { passive: false });
+  document.addEventListener('gestureend', e => e.preventDefault(), { passive: false });
+  let lastTouch = 0;
+  document.addEventListener('touchend', e => {
+    const now = new Date().getTime();
+    if (now - lastTouch <= 300) e.preventDefault();
+    lastTouch = now;
+  }, false);
+
+  /***** Printing *****/
+  window.addEventListener('beforeprint', showBlur);
+  window.addEventListener('afterprint', hideBlur);
+
+  /***** DevTools Detection with Redirect *****/
+  let devToolsOpen = false;
+  function detectDevTools() {
+    const start = new Date();
+    debugger; // pause if DevTools is open
+    const end = new Date();
+    if (end - start > 100) {
+      if (!devToolsOpen) {
+        devToolsOpen = true;
+        window.location.href = "https://barknbondk9solutions.com";
+      }
+    } else {
+      devToolsOpen = false;
+    }
+  }
+  setInterval(detectDevTools, 1500);
+
+  /***** API *****/
+  window.OgivalProtection = {
+    enableBlur: showBlur,
+    disableBlur: hideBlur,
+    enable: () => document.head.appendChild(styleEl),
+    disable: () => styleEl.remove(),
+    isEnabled: () => !!document.querySelector('style[data-ogival-style]')
+  };
+
+  updateOverlaySize();
+})();
